@@ -1,11 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-//const api = require('./api');
-const PORT = process.env.PORT || 4000;
-const users = require('./routes/user.js');
-const bodyParser = require('body-parser');
+require('./configs/dotenv');
 const app = express();
-const corsOptions = { origin: `http://localhost:${PORT}` };
+const port = process.env.PORT || 4000;
+const client = require('./configs/database');
+const user = require('./routes/users');
+const bodyParser = require('body-parser');
 
 const myLogger = (req, res, next) => {
   const log = {
@@ -16,19 +16,26 @@ const myLogger = (req, res, next) => {
   next();
 };
 
-app.use(bodyParser.json());
-app.use(myLogger);
-app.use(express.json());
-app.use(cors(corsOptions));
+//app.use(bodyParser.json());
 
-app.post('/sign-up', users.postSignUp);
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+client.connect((err) => {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log('Data logging initiated!');
+  }
 });
 
+app.use(bodyParser.json());
+app.use(myLogger);
+app.use('/user', user);
+app.use(express.json());
+app.use(cors());
 
+app.get('/', (req, res) => {
+  res.status(200).send('Engine Started, Ready to take off!');
+});
 
-
-
-
+app.listen(port, () => {
+  console.log(`Here we go, Engines started at ${port}.`);
+});
