@@ -28,7 +28,7 @@ client.connect((err) => {
 
 app.use(bodyParser.json());
 app.use(myLogger);
-app.use('/user', user);
+app.use('/users', user);
 app.use(express.json());
 app.use(cors());
 
