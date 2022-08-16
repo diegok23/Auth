@@ -1,7 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 //const fs = require('fs');
-const database = require('./database/database');
+const generateJWT = require("../utils/generateJWT");
+const database = require('../database/database');
 
 
 // user registration / sign-up
